@@ -8,15 +8,22 @@ import { useSelector } from "react-redux";
 function PostForm({ post }) {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-  const { register, handleSubmit, control, watch, setValue, getValues } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        content: post?.content || "",
-        slug: post?.$id || "",
-        status: post?.status ? "active" : "inactive",
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      content: post?.content || "",
+      slug: post?.$id || "",
+      status: post?.status ? "active" : "inactive",
+    },
+  });
 
   const submit = async (data) => {
     if (post) {
@@ -124,8 +131,9 @@ function PostForm({ post }) {
         />
         <Button
           type="submit"
+          disabled={isSubmitting}
           bgColor={post ? "bg-green-500" : undefined}
-          className="w-full"
+          className={`w-full ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {post ? "Update" : "Submit"}
         </Button>
