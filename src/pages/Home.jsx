@@ -9,14 +9,16 @@ function Home() {
   const userData = useSelector((state) => state.auth.userData);
 
   useEffect(() => {
-    appwriteService.getActivePosts(true,userData?.$id).then((posts) => {
-      if (posts) {
-        setPosts(posts.documents);
+    if (!authStatus || !userData?.$id) return;
+
+    appwriteService.getActivePosts(true, userData.$id).then((res) => {
+      if (res) {
+        setPosts(res.documents);
       }
     });
-  }, [userData?.$id]);
+  }, [authStatus, userData?.$id]);
 
-  if (posts.length === 0) {
+  if (!authStatus) {
     return (
       <div className="w-full py-8 mt-4 text-center">
         <Container>
