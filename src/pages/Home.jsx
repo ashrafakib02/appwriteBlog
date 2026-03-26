@@ -9,17 +9,14 @@ function Home() {
   const userData = useSelector((state) => state.auth.userData);
 
   useEffect(() => {
-    if (!authStatus || !userData?.$id) return;
-
-    appwriteService.getActivePosts(true, userData.$id).then((res) => {
-      if (res) {
-        setPosts(res.documents);
+    appwriteService.getActivePosts(true,userData?.$id).then((posts) => {
+      if (posts) {
+        setPosts(posts.documents);
       }
     });
-  }, [authStatus, userData?.$id]);
-// const visiblePosts = authStatus ? posts : [];
+  }, [userData?.$id]);
 
-  if (!authStatus) {
+  if (posts.length === 0) {
     return (
       <div className="w-full py-8 mt-4 text-center">
         <Container>
